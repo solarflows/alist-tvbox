@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:h2:file:/data/atv
+    url: jdbc:h2:file:/config/alist-tvbox/atv
     username: sa
     password: password
     driverClassName: org.h2.Driver
   sql:
     init:
-      data-locations: file:/data/atv/data.sql
+      data-locations: file:/config/alist-tvbox/atv/data.sql
 
 logging:
   file:

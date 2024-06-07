@@ -1,4 +1,4 @@
-name: 'release native dev docker'
+name: 'Release Native Dev Docker'
 
 on:
   workflow_dispatch:
@@ -16,27 +16,35 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch }}
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 18.16.x
           cache: npm
           cache-dependency-path: ./web-ui
+
       - name: Install npm
         working-directory: ./web-ui
         run: npm ci
+
       - name: Build web UI
         working-directory: ./web-ui
         run: npm run build
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
+
+      - name: Login to GitHub Container Registry (ghcr)
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_TOKEN }}
+
       - name: Set APP version
         run: |
           mkdir data
@@ -48,6 +56,7 @@ jobs:
           echo ${{ github.event.head_commit.message }} >> data/version
           cp data/version data/app_version
           cat data/version
+
       - name: Build docker and push
         uses: docker/build-push-action@v4
         with:
@@ -55,6 +64,6 @@ jobs:
           file: Dockerfile-native
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/xiaoya-tvbox:native-dev
+          tags: ghcr.io/${{ github.repository_owner }}/xiaoya-tvbox:native-dev
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -16,16 +16,16 @@
     <url>https://har01d.cn/</url>
 
     <scm>
-        <url>https://github.com/power721/alist-tvbox</url>
-        <connection>scm:git:https://github.com/power721/alist-tvbox.git</connection>
-        <developerConnection>scm:git:https://github.com/power721/alist-tvbox</developerConnection>
+        <url>https://github.com/solarflows/alist-tvbox</url>
+        <connection>scm:git:https://github.com/solarflows/alist-tvbox.git</connection>
+        <developerConnection>scm:git:https://github.com/solarflows/alist-tvbox</developerConnection>
     </scm>
 
     <developers>
         <developer>
             <name>Harold</name>
             <email>power0721@gmail.com</email>
-            <url>https://github.com/power721</url>
+            <url>https://github.com/solarflows</url>
         </developer>
     </developers>
 

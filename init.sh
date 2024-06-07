@@ -2,36 +2,36 @@
 
 update_movie() {
   LOCAL="0.0"
-  if [ -f /data/atv/base_version ]; then
-    LOCAL=$(head -n 1 </data/atv/base_version)
+  if [ -f /config/alist-tvbox/atv/base_version ]; then
+    LOCAL=$(head -n 1 </config/alist-tvbox/atv/base_version)
   fi
   REMOTE=$(head -n 1 </base_version)
   echo "movie base version: $LOCAL $REMOTE"
   if [ "$LOCAL" != "$REMOTE" ]; then
     echo "upgrade movie data"
-    unzip -q -o /data.zip -d /data/atv/
+    unzip -q -o /data.zip -d /config/alist-tvbox/atv/
     cp /base_version /tmp/
-    rm -f /data/atv/sql/*.sql
+    rm -f /config/alist-tvbox/atv/sql/*.sql
   fi
 }
 
 restore_database() {
-  if [ -f "/data/database.zip" ]; then
+  if [ -f "/config/alist-tvbox/database.zip" ]; then
     echo "=== restore database ==="
-    rm -f /data/atv.mv.db /data/atv.trace.db
-    java -cp /opt/atv/BOOT-INF/lib/h2-*.jar org.h2.tools.RunScript -url jdbc:h2:/data/atv -user sa -password password -script /data/database.zip -options compression zip
-    rm -f /data/database.zip /data/atv/base_version /data/atv/movie_version
+    rm -f /config/alist-tvbox/atv.mv.db /config/alist-tvbox/atv.trace.db
+    java -cp /opt/atv/BOOT-INF/lib/h2-*.jar org.h2.tools.RunScript -url jdbc:h2:/config/alist-tvbox/atv -user sa -password password -script /config/alist-tvbox/database.zip -options compression zip
+    rm -f /config/alist-tvbox/database.zip /config/alist-tvbox/atv/base_version /config/alist-tvbox/atv/movie_version
   fi
 }
 
 init() {
-  mkdir -p /var/lib/pxg /www/cgi-bin /index /data/atv /data/index /data/backup
+  mkdir -p /var/lib/pxg /www/cgi-bin /index /config/alist-tvbox/atv /config/alist-tvbox/index /config/alist-tvbox/backup
   if [ -d /index ]; then
     rm -rf /index
   fi
-  [ -h /data/log/log ] && unlink /data/log/log
-  ln -sf /data/index /
-  ln -sf /data/config .
+  [ -h /config/alist-tvbox/log/log ] && unlink /config/alist-tvbox/log/log
+  ln -sf /config/alist-tvbox/index /
+  ln -sf /config/alist-tvbox/config .
   cd /var/lib/pxg
   unzip -q /var/lib/data.zip
   mv data.db /opt/alist/data/data.db
@@ -58,13 +58,13 @@ init() {
   cp /tvbox.zip ./
 
   unzip -q -o tvbox.zip
-  if [ -f /data/my.json ]; then
+  if [ -f /config/alist-tvbox/my.json ]; then
     rm /www/tvbox/my.json
-    ln -s /data/my.json /www/tvbox/my.json
+    ln -s /config/alist-tvbox/my.json /www/tvbox/my.json
   fi
 
-  if [ -f /data/iptv.m3u ]; then
-    ln -s /data/iptv.m3u /www/tvbox/iptv.m3u
+  if [ -f /config/alist-tvbox/iptv.m3u ]; then
+    ln -s /config/alist-tvbox/iptv.m3u /www/tvbox/iptv.m3u
   fi
 
   rm -f tvbox.zip index.zip index.txt version.txt update.zip
@@ -91,13 +91,13 @@ if [ ! -d /www/cat ]; then
   mkdir /www/cat
   unzip -q -o /cat.zip -d /www/cat
 fi
-[ -d /data/cat ] && cp -r /data/cat/* /www/cat/
+[ -d /config/alist-tvbox/cat ] && cp -r /config/alist-tvbox/cat/* /www/cat/
 
 if [ ! -d /www/pg ]; then
   mkdir /www/pg
   unzip -q -o /pg.zip -d /www/pg
 fi
-[ -d /data/pg ] && cp -r /data/pg/* /www/pg/
+[ -d /config/alist-tvbox/pg ] && cp -r /config/alist-tvbox/pg/* /www/pg/
 
 cd /tmp/
 
@@ -143,10 +143,10 @@ if [ ! -f version.txt ]; then
   echo "Failed to download version.txt file, the index file upgrade process has aborted"
 else
   remote=$(head -n1 version.txt)
-  if [ ! -f /data/index/version.txt ]; then
-    echo 0.0.0 >/data/index/version.txt
+  if [ ! -f /config/alist-tvbox/index/version.txt ]; then
+    echo 0.0.0 >/config/alist-tvbox/index/version.txt
   fi
-  local=$(head -n1 /data/index/version.txt)
+  local=$(head -n1 /config/alist-tvbox/index/version.txt)
   echo "index version: $local $remote"
   latest=$(printf "$remote\n$local\n" | sort -r | head -n1)
   if [ "$remote" = "$local" ]; then
@@ -160,35 +160,35 @@ else
       echo "Failed to download index compressed file, the index file upgrade process has aborted"
     else
       unzip -o -q -P abcd index.zip
-      cat index.video.txt index.book.txt index.music.txt index.non.video.txt >/data/index/index.txt
-      mv index*.txt /data/index/
+      cat index.video.txt index.book.txt index.music.txt index.non.video.txt >/config/alist-tvbox/index/index.txt
+      mv index*.txt /config/alist-tvbox/index/
       echo "$(date) update index successfully, your new version is $remote"
-      echo "$remote" >/data/index/version.txt
+      echo "$remote" >/config/alist-tvbox/index/version.txt
     fi
   else
     echo "$(date) your current version is updated, no need to downgrade"
-    echo "$remote" >/data/index/version.txt
+    echo "$remote" >/config/alist-tvbox/index/version.txt
   fi
   rm -f index.* update.* version.txt
 fi
 
 LOCAL="0.0"
-if [ -f /data/index/share_version ]; then
-  LOCAL=$(head -n 1 </data/index/share_version)
+if [ -f /config/alist-tvbox/index/share_version ]; then
+  LOCAL=$(head -n 1 </config/alist-tvbox/index/share_version)
 fi
 unzip -q -o /index.share.zip -d /tmp
 REMOTE=$(head -n 1 </tmp/share_version)
 echo "share index version: $LOCAL $REMOTE"
 if [ "$LOCAL" != "$REMOTE" ]; then
   echo "upgrade share index"
-  mv /tmp/index.share.txt /data/index/index.share.txt
-  mv /tmp/share_version /data/index/share_version
-  grep -v "/🈴我的阿里分享/" /data/index/index.video.txt >/data/index/index.video.txt.1
-  grep -v "/🈴我的阿里分享/" /data/index/index.txt >/data/index/index.txt.1
-  mv /data/index/index.video.txt.1 /data/index/index.video.txt
-  mv /data/index/index.txt.1 /data/index/index.txt
-  cat /data/index/index.share.txt >> /data/index/index.video.txt
-  cat /data/index/index.share.txt >> /data/index/index.txt
+  mv /tmp/index.share.txt /config/alist-tvbox/index/index.share.txt
+  mv /tmp/share_version /config/alist-tvbox/index/share_version
+  grep -v "/🈴我的阿里分享/" /config/alist-tvbox/index/index.video.txt >/config/alist-tvbox/index/index.video.txt.1
+  grep -v "/🈴我的阿里分享/" /config/alist-tvbox/index/index.txt >/config/alist-tvbox/index/index.txt.1
+  mv /config/alist-tvbox/index/index.video.txt.1 /config/alist-tvbox/index/index.video.txt
+  mv /config/alist-tvbox/index/index.txt.1 /config/alist-tvbox/index/index.txt
+  cat /config/alist-tvbox/index/index.share.txt >> /config/alist-tvbox/index/index.video.txt
+  cat /config/alist-tvbox/index/index.share.txt >> /config/alist-tvbox/index/index.txt
 fi
 rm -f /tmp/index.share.txt
 

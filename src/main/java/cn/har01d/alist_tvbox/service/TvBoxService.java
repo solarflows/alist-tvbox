@@ -230,7 +230,7 @@ public class TvBoxService {
         }
 
         try {
-            Path file = Paths.get("/data/category.txt");
+            Path file = Paths.get("/config/alist-tvbox/category.txt");
             if (Files.exists(file)) {
                 String typeId = "";
                 List<FilterValue> filters = new ArrayList<>();
@@ -576,7 +576,7 @@ public class TvBoxService {
         }
 
         List<MovieDetail> list = searchFromIndexFile(site, ac, keyword, indexFile);
-        File customIndexFile = new File("/data/index/" + site.getId() + "/custom_index.txt");
+        File customIndexFile = new File("/config/alist-tvbox/index/" + site.getId() + "/custom_index.txt");
         log.debug("custom index file: {}", customIndexFile);
         if (customIndexFile.exists()) {
             list.addAll(searchFromIndexFile(site, ac, keyword, customIndexFile.getAbsolutePath()));
@@ -653,7 +653,7 @@ public class TvBoxService {
         }
 
         List<MovieDetail> result = new ArrayList<>();
-        for (File file : Utils.listFiles("/data/index/" + site.getId(), "txt")) {
+        for (File file : Utils.listFiles("/config/alist-tvbox/index/" + site.getId(), "txt")) {
             result.addAll(searchFromIndexFile(site, ac, keyword, file.getAbsolutePath()));
         }
 
@@ -694,12 +694,12 @@ public class TvBoxService {
 
     private List<MovieDetail> searchByXiaoya(Site site, String ac, String keyword) throws IOException {
         List<MovieDetail> list = new ArrayList<>();
-        for (File file : Utils.listFiles("/data/index/" + site.getId(), "txt")) {
+        for (File file : Utils.listFiles("/config/alist-tvbox/index/" + site.getId(), "txt")) {
             list.addAll(searchFromIndexFile(site, ac, keyword, file.getAbsolutePath()));
         }
 
         if (site.getId() == 1) {
-            list.addAll(searchFromIndexFile(site, ac, keyword, "/data/index/index.video.txt"));
+            list.addAll(searchFromIndexFile(site, ac, keyword, "/config/alist-tvbox/index/index.video.txt"));
             return list;
         }
 

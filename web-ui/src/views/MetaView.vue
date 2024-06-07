@@ -133,7 +133,7 @@
       <el-form-item label="强制更新？">
         <el-switch v-model="force"/>
       </el-form-item>
-      <p>索引文件：/data/index/{{ siteId }}/custom_index.txt</p>
+      <p>索引文件：/config/alist-tvbox/index/{{ siteId }}/custom_index.txt</p>
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="scrapeVisible = false">取消</el-button>

@@ -9,7 +9,7 @@ services:
       ALIST_PORT: 5344
       MEM_OPT: -Xmx512M
     volumes:
-      - /etc/xiaoya:/data
+      - /etc/xiaoya:/config/alist-tvbox
     ports:
       - "4567:4567"
       - "5344:80"

@@ -120,7 +120,7 @@ public class YoutubeService {
         Config config = new Config.Builder().header("User-Agent", Constants.USER_AGENT).build();
 
         try {
-            Path path = Path.of("/data/proxy.txt");
+            Path path = Path.of("/config/alist-tvbox/proxy.txt");
             if (Files.exists(path)) {
                 String line = Files.readString(path).trim();
                 URI uri = URI.create(line);
@@ -142,7 +142,7 @@ public class YoutubeService {
     public CategoryList category() throws IOException {
         CategoryList result = new CategoryList();
 
-        Path path = Path.of("/data/youtube.txt");
+        Path path = Path.of("/config/alist-tvbox/youtube.txt");
         if (Files.exists(path)) {
             for (String line : Files.readAllLines(path)) {
                 if (StringUtils.isBlank(line)) {

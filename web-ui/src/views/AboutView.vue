@@ -3,13 +3,13 @@
     <p>AList proxy server for TvBox, support playlist and search.</p>
     <p>
       源代码：
-      <a href="https://github.com/power721/alist-tvbox" target="_blank">https://github.com/power721/alist-tvbox</a>
+      <a href="https://github.com/solarflows/alist-tvbox" target="_blank">https://github.com/solarflows/alist-tvbox</a>
     </p>
     <p>
       中文文档：<a href="https://har01d.cn/#/notes/alist-tvbox" target="_blank">https://har01d.cn/#/notes/alist-tvbox</a>
     </p>
     <p>
-      <a href="https://github.com/power721/alist-tvbox/blob/master/doc/README_zh.md" target="_blank">https://github.com/power721/alist-tvbox/blob/master/doc/README_zh.md</a>
+      <a href="https://github.com/solarflows/alist-tvbox/blob/master/doc/README_zh.md" target="_blank">https://github.com/solarflows/alist-tvbox/blob/master/doc/README_zh.md</a>
     </p>
     <p>
       AList：

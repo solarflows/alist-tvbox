@@ -45,7 +45,7 @@ public class ConfigFileService {
 
     private void loadLabels() {
         try {
-            Path path = Path.of("/data/label.txt");
+            Path path = Path.of("/config/alist-tvbox/label.txt");
             if (Files.exists(path)) {
                 loadLabels(Files.readAllLines(path));
             }
@@ -79,14 +79,14 @@ public class ConfigFileService {
     }
 
     private void readFiles() {
-        readFile("/data/tv.txt");
-        readFile("/data/proxy.txt");
+        readFile("/config/alist-tvbox/tv.txt");
+        readFile("/config/alist-tvbox/proxy.txt");
 
-        if (Files.exists(Paths.get("/data/iptv.m3u"))) {
+        if (Files.exists(Paths.get("/config/alist-tvbox/iptv.m3u"))) {
             readFile("/www/tvbox/iptv.m3u");
         }
 
-        if (Files.exists(Paths.get("/data/my.json"))) {
+        if (Files.exists(Paths.get("/config/alist-tvbox/my.json"))) {
             readFile("/www/tvbox/my.json");
         }
 
@@ -140,7 +140,7 @@ public class ConfigFileService {
         Files.createDirectories(Paths.get(configFile.getDir()));
         Path path = Paths.get(configFile.getDir(), configFile.getName());
         Files.writeString(path, configFile.getContent());
-        if (path.toString().equals("/data/label.txt")) {
+        if (path.toString().equals("/config/alist-tvbox/label.txt")) {
             loadLabels(Arrays.asList(configFile.getContent().split("\n")));
         }
     }

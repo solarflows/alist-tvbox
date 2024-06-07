@@ -136,7 +136,7 @@ public class IndexService {
     @PostConstruct
     public void setup() {
         try {
-            Path path = Paths.get("/data/index/version.txt");
+            Path path = Paths.get("/config/alist-tvbox/index/version.txt");
             if (Files.exists(path)) {
                 List<String> lines = Files.readAllLines(path);
                 if (!lines.isEmpty()) {
@@ -396,7 +396,7 @@ public class IndexService {
     @Async
     public void index(IndexRequest indexRequest, cn.har01d.alist_tvbox.entity.Site site, Task task) throws IOException {
         StopWatch stopWatch = new StopWatch("index");
-        File dir = new File("/data/index/" + indexRequest.getSiteId());
+        File dir = new File("/config/alist-tvbox/index/" + indexRequest.getSiteId());
         Files.createDirectories(dir.toPath());
         File file = new File(dir, indexRequest.getIndexName() + ".txt");
         File info = new File(dir, indexRequest.getIndexName() + ".info");
@@ -946,7 +946,7 @@ public class IndexService {
 
     public List<FileItem> listIndexFiles(int id) {
         try {
-            Path path = Paths.get("/data/index/" + id);
+            Path path = Paths.get("/config/alist-tvbox/index/" + id);
             return Files.list(path)
                     .filter(p -> p.getFileName().toString().endsWith(".txt"))
                     .sorted()

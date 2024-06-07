@@ -155,7 +155,7 @@
           <el-option v-for="item in index" :key="item.name" :label="item.name" :value="item.name"/>
         </el-select>
       </el-form-item>
-      <p v-if="indexName">索引文件：/data/index/{{ siteId }}/{{ indexName }}.txt</p>
+      <p v-if="indexName">索引文件：/config/alist-tvbox/index/{{ siteId }}/{{ indexName }}.txt</p>
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="scrapeVisible = false">取消</el-button>

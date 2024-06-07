@@ -119,9 +119,9 @@ fi
 echo -e "\e[33m重启应用\e[0m"
 docker rm -f xiaoya-tvbox 2>/dev/null
 if [ "$NET" = "" ]; then
-  docker run -d -p $PORT1:4567 -p $PORT2:80 -e ALIST_PORT=$PORT2 -v "$BASE_DIR":/data $MOUNT --restart=always --name=xiaoya-tvbox haroldli/xiaoya-tvbox:${TAG}
+  docker run -d -p $PORT1:4567 -p $PORT2:80 -e ALIST_PORT=$PORT2 -v "$BASE_DIR":/config/alist-tvbox $MOUNT --restart=always --name=xiaoya-tvbox haroldli/xiaoya-tvbox:${TAG}
 else
-  docker run -d $NET -v "$BASE_DIR":/data $MOUNT --restart=always --name=xiaoya-tvbox haroldli/xiaoya-tvbox:${TAG}
+  docker run -d $NET -v "$BASE_DIR":/config/alist-tvbox $MOUNT --restart=always --name=xiaoya-tvbox haroldli/xiaoya-tvbox:${TAG}
 fi
 
 echo -e "\n\e[32m请使用以下命令查看日志输出：\e[0m"

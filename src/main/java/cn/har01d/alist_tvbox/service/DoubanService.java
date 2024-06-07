@@ -124,7 +124,7 @@ public class DoubanService {
     @PostConstruct
     public void setup() {
         try {
-            Path path = Paths.get("/data/atv/movie_version");
+            Path path = Paths.get("/config/alist-tvbox/atv/movie_version");
             if (Files.exists(path)) {
                 List<String> lines = Files.readAllLines(path);
                 if (!lines.isEmpty()) {
@@ -151,7 +151,7 @@ public class DoubanService {
                 }
 
                 log.debug("reset data.sql");
-                writeText("/data/atv/data.sql", "SELECT COUNT(*) FROM META;");
+                writeText("/config/alist-tvbox/atv/data.sql", "SELECT COUNT(*) FROM META;");
             }
         }
 
@@ -161,11 +161,11 @@ public class DoubanService {
 
     private void runCmd() {
         try {
-            Path path = Paths.get("/data/atv/cmd.sql");
+            Path path = Paths.get("/config/alist-tvbox/atv/cmd.sql");
             if (Files.exists(path)) {
                 log.info("run sql from file {}", path);
                 try {
-                    jdbcTemplate.execute("RUNSCRIPT FROM '/data/atv/cmd.sql'");
+                    jdbcTemplate.execute("RUNSCRIPT FROM '/config/alist-tvbox/atv/cmd.sql'");
                 } catch (Exception e) {
                     log.warn("execute sql failed: {}", e);
                 }
@@ -237,7 +237,7 @@ public class DoubanService {
 
     private String getCachedVersion() {
         try {
-            Path file = Paths.get("/data/atv/movie_version");
+            Path file = Paths.get("/config/alist-tvbox/atv/movie_version");
             if (Files.exists(file)) {
                 return Files.readString(file).trim();
             }
@@ -272,7 +272,7 @@ public class DoubanService {
 
     private Stream<Path> getSqlFiles(String version) throws IOException {
         double local = Double.parseDouble(version);
-        return Files.list(Path.of("/data/atv/sql"))
+        return Files.list(Path.of("/config/alist-tvbox/atv/sql"))
                 .filter(e -> Double.compare(getVersionNumber(e), local) > 0)
                 .sorted((a, b) -> Double.compare(getVersionNumber(a), getVersionNumber(b)));
     }
@@ -458,7 +458,7 @@ public class DoubanService {
     }
 
     private Set<String> loadFailed() {
-        Path path = Paths.get("/data/atv/failed.txt");
+        Path path = Paths.get("/config/alist-tvbox/atv/failed.txt");
         try {
             List<String> lines = Files.readAllLines(path).stream().filter(e -> !e.startsWith("/")).toList();
             return new HashSet<>(lines);
@@ -470,7 +470,7 @@ public class DoubanService {
 
     @Async
     public void scrape(Integer siteId, boolean force) throws IOException {
-        Path path = Paths.get("/data/index", String.valueOf(siteId), "custom_index.txt");
+        Path path = Paths.get("/config/alist-tvbox/index", String.valueOf(siteId), "custom_index.txt");
         if (!Files.exists(path)) {
             throw new BadRequestException("索引文件不存在");
         }
@@ -515,8 +515,8 @@ public class DoubanService {
 
         taskService.completeTask(task.getId());
 
-        writeText("/data/atv/paths.txt", String.join("\n", paths));
-        writeText("/data/atv/failed.txt", String.join("\n", failed));
+        writeText("/config/alist-tvbox/atv/paths.txt", String.join("\n", paths));
+        writeText("/config/alist-tvbox/atv/failed.txt", String.join("\n", failed));
     }
 
     private static void writeText(String path, String content) {

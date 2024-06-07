@@ -40,9 +40,9 @@ public class LogsService {
         if ("alist".equals(type)) {
             return Paths.get("/opt/alist/log/alist.log");
         } else if ("init".equals(type)) {
-            return Paths.get("/data/log/init.log");
+            return Paths.get("/config/alist-tvbox/log/init.log");
         } else {
-            return Paths.get("/data/log/app.log");
+            return Paths.get("/config/alist-tvbox/log/app.log");
         }
     }
 

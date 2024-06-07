@@ -115,7 +115,7 @@ public class SiteService {
     }
 
     private void readAList(int order) {
-        Path path = Paths.get("/data/alist_list.txt");
+        Path path = Paths.get("/config/alist-tvbox/alist_list.txt");
         if (Files.exists(path)) {
             try {
                 log.info("loading site list from file");

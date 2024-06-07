@@ -1,21 +1,21 @@
 #!/bin/sh
 
 restore_database() {
-  if [ -f "/data/database.zip" ]; then
+  if [ -f "/config/alist-tvbox/database.zip" ]; then
     echo "=== restore database ==="
-    rm -f /data/atv.mv.db /data/atv.trace.db
-    java -cp /opt/atv/BOOT-INF/lib/h2-*.jar org.h2.tools.RunScript -url jdbc:h2:/data/atv -user sa -password password -script /data/database.zip -options compression zip
-    rm -f /data/database.zip
+    rm -f /config/alist-tvbox/atv.mv.db /config/alist-tvbox/atv.trace.db
+    java -cp /opt/atv/BOOT-INF/lib/h2-*.jar org.h2.tools.RunScript -url jdbc:h2:/config/alist-tvbox/atv -user sa -password password -script /config/alist-tvbox/database.zip -options compression zip
+    rm -f /config/alist-tvbox/database.zip
   fi
 }
 
 init() {
-  mkdir -p /var/lib/pxg /www/cgi-bin /data/atv /data/index /data/backup
+  mkdir -p /var/lib/pxg /www/cgi-bin /config/alist-tvbox/atv /config/alist-tvbox/index /config/alist-tvbox/backup
   if [ -d /index ]; then
     rm -rf /index
   fi
-  ln -sf /data/index /
-  ln -sf /data/config .
+  ln -sf /config/alist-tvbox/index /
+  ln -sf /config/alist-tvbox/config .
   cd /var/lib/pxg
   unzip -q /var/lib/data.zip
   mv search /www/cgi-bin/search
@@ -58,10 +58,10 @@ if [ ! -d /www/cat ]; then
   mkdir /www/cat
   unzip -q -o /cat.zip -d /www/cat
 fi
-[ -d /data/cat ] && cp -r /data/cat/* /www/cat/
+[ -d /config/alist-tvbox/cat ] && cp -r /config/alist-tvbox/cat/* /www/cat/
 
 if [ ! -d /www/pg ]; then
   mkdir /www/pg
   unzip -q -o /pg.zip -d /www/pg
 fi
-[ -d /data/pg ] && cp -r /data/pg/* /www/pg/
+[ -d /config/alist-tvbox/pg ] && cp -r /config/alist-tvbox/pg/* /www/pg/

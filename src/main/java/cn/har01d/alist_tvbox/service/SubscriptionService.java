@@ -275,8 +275,8 @@ public class SubscriptionService {
     }
 
     public int syncCat() {
-        Utils.execute("rm -rf /www/pg/* && unzip -q -o /pg.zip -d /www/pg && cp -r /data/pg/* /www/pg/");
-        Utils.execute("rm -rf /www/cat/* && unzip -q -o /cat.zip -d /www/cat && cp -r /data/cat/* /www/cat/");
+        Utils.execute("rm -rf /www/pg/* && unzip -q -o /pg.zip -d /www/pg && cp -r /config/alist-tvbox/pg/* /www/pg/");
+        Utils.execute("rm -rf /www/cat/* && unzip -q -o /cat.zip -d /www/cat && cp -r /config/alist-tvbox/cat/* /www/cat/");
         return 0;
     }
 

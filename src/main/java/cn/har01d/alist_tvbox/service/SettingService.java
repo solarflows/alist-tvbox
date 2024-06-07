@@ -67,7 +67,7 @@ public class SettingService {
     public File backupDatabase() {
         try {
             jdbcTemplate.execute("SCRIPT TO '/tmp/script.sql' TABLE ACCOUNT, ALIST_ALIAS, CONFIG_FILE, ID_GENERATOR, INDEX_TEMPLATE, NAVIGATION, PIK_PAK_ACCOUNT, SETTING, SHARE, SITE, SUBSCRIPTION, TASK, USERS, TMDB, TMDB_META");
-            File out = new File("/data/backup/database-" + LocalDate.now() + ".zip");
+            File out = new File("/config/alist-tvbox/backup/database-" + LocalDate.now() + ".zip");
             out.createNewFile();
             try (FileOutputStream fos = new FileOutputStream(out);
                  ZipOutputStream zipOut = new ZipOutputStream(fos)) {
@@ -84,7 +84,7 @@ public class SettingService {
 
     private void cleanBackups() {
         LocalDate day = LocalDate.now().minusDays(7);
-        for (File file : Utils.listFiles("/data/backup", "zip")) {
+        for (File file : Utils.listFiles("/config/alist-tvbox/backup", "zip")) {
             if (file.getName().startsWith("database-")) {
                 try {
                     String name = file.getName().replace("database-", "").replace(".zip", "");

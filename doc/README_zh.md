@@ -100,13 +100,13 @@ sudo bash -c "$(curl -fsSL https://d.har01d.cn/update_new.sh)"
 #### NAS
 对于群辉等NAS系统，请挂载Docker的/data目录到群辉文件系统，否则数据不会保留。
 #### 创建容器
-![创建容器](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_docker1.png)
+![创建容器](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_docker1.png)
 #### 目录映射
-![目录映射](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_docker2.png)
+![目录映射](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_docker2.png)
 #### 端口映射
-![端口映射](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_docker3.png)
+![端口映射](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_docker3.png)
 #### 环境变量
-![环境变量](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_docker4.png)
+![环境变量](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_docker4.png)
 
 ### 自动更新
 使用root用户创建corntab定时任务
@@ -124,11 +124,11 @@ crontab -l | { cat; echo "0 2 * * * /opt/update_xiaoya.sh -u"; } | crontab -
 
 ### 海报展示
 #### 浏览目录
-![浏览目录](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/poster1.jpg)
+![浏览目录](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/poster1.jpg)
 #### 搜索界面
-![搜索界面](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/poster2.jpg)
+![搜索界面](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/poster2.jpg)
 #### 播放界面
-![播放界面](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/poster3.jpg)
+![播放界面](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/poster3.jpg)
 
 ## 管理
 打开管理网页：http://your-ip:4567/ 
@@ -138,7 +138,7 @@ crontab -l | { cat; echo "0 2 * * * /opt/update_xiaoya.sh -u"; } | crontab -
 点击右上角菜单，进入用户界面修改用户名和密码。
 
 ### 站点
-![站点列表](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_sites.png)
+![站点列表](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_sites.png)
 
 默认添加了站点：`http://localhost`，如果AList配置有域名，自行修改地址。否则保持`http://localhost`！
 
@@ -151,28 +151,28 @@ crontab -l | { cat; echo "0 2 * * * /opt/update_xiaoya.sh -u"; } | crontab -
 
 选择TvBox第二个站源，观看三方站点内容。或者在我的套娃观看。
 
-![添加站点](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_site_config.png)
+![添加站点](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_site_config.png)
 
 如果AList开启了强制登录，会自动填写认证token。
 
-![站点数据](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_site_data.png)
+![站点数据](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_site_data.png)
 
 ### 账号
-![账号列表](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_account.png)
+![账号列表](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_account.png)
 
 第一次启动会自动读取/data/mytoken.txt,/data/myopentoken.txt里面的内容，以后这些文件不再生效。
 自动创建转存文件夹，不需要再填写转存文件夹ID。
 
 修改主账号后需要重启AList服务。
 
-![账号详情](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_account_detail.png)
+![账号详情](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_account_detail.png)
 
 ### 订阅
 tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 
-![订阅列表](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_sub.png)
+![订阅列表](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_sub.png)
 
-![添加订阅](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_sub_config.png)
+![添加订阅](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_sub_config.png)
 
 添加订阅支持多个URL，用逗号隔开。定制部分基本和TvBox的配置json一致，添加了站点白名单`sites-whitelist`和黑名单`blacklist`。
 
@@ -229,7 +229,7 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 }
 ```
 
-![订阅预览](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_sub_data.png)
+![订阅预览](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_sub_data.png)
 
 #### 自定义多仓订阅
 在文件页面新建文件，目录：/www/tvbox/repo，名称：订阅id.json，比如：1.json。
@@ -256,15 +256,15 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 
 添加资源如果路径以/开头就会创建在根目录下。否则在/🈴我的阿里分享/下面。
 
-![分享列表](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_shares.png)
+![分享列表](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_shares.png)
 
 ### 海报墙模式
-![海报](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_poster.jpg)
-![海报1](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_poster1.jpg)
+![海报](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_poster.jpg)
+![海报1](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_poster1.jpg)
 
 添加一个小雅站点并打开搜索功能。
 
-![源](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_source.jpg)
+![源](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_source.jpg)
 
 可以自定义类别。在文件管理界面，添加一个文件/data/category.txt，内容是要显示的小雅目录。
 
@@ -277,36 +277,36 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
   美剧（已刮削）:美剧ℹ
 </pre>
 
-[示例文件](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/category.txt)
+[示例文件](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/category.txt)
 
-![类别](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_category.png)
+![类别](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_category.png)
 
-![filter](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_filter.jpg)
+![filter](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_filter.jpg)
 
 ### BiliBili
 拖动行可以改变顺序，需要点击保存按钮才能生效。
 
 打开、关闭显示开关后，需要点击保存按钮才能生效。
 
-![BiliBili](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_bilibili.png)
+![BiliBili](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_bilibili.png)
 
 登录后才能使用，TvBox第三个站源。
 
-![扫码登录](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_bilibili_login.png)
+![扫码登录](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_bilibili_login.png)
 
 或者使用已有的cookie登录。
 
 打开上报播放记录，B站才能看到播放记录。
 
-![配置](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_bilibili_config.png)
+![配置](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_bilibili_config.png)
 
 添加搜索关键词作为一级分类：
 
-![搜索](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_bilibili_search.png)
+![搜索](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_bilibili_search.png)
 
 添加频道作为一级分类：
 
-![频道](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_bilibili_channel.png)
+![频道](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_bilibili_channel.png)
 
 ### YouTube
 服务端代理，需要消耗服务器流量！
@@ -332,7 +332,7 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 ```
 
 ### 配置
-![配置页面](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_config.png)
+![配置页面](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_config.png)
 
 开启安全订阅，在订阅URL、点播API、播放API加上Token，防止被别人扫描。
 
@@ -351,9 +351,9 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 ### 索引
 对于阿里云盘资源，建议使用文件数量少的路径，并限速，防止被封号。
 
-![索引页面](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_index.png)
+![索引页面](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_index.png)
 
-![索引模板](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_index_template.png)
+![索引模板](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_index_template.png)
 
 #### 索引文件
 路径开头加上-：表示此路径屏蔽搜索和刮削。
@@ -388,7 +388,7 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 ### 别名
 把一些路径合并成一个路径。
 
-![别名页面](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/atv_alias.png)
+![别名页面](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/atv_alias.png)
 
 ### WebDAV
 如果没有开启强制登录，使用默认密码：
@@ -397,7 +397,7 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 
 密码: guest_Api789
 
-![WebDAV](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/webdav.jpg)
+![WebDAV](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/webdav.jpg)
 
 ### 猫影视
 #### 自定义猫影视配置
@@ -410,7 +410,7 @@ tvbox/my.json和juhe.json不能在TvBox直接使用，请使用订阅地址！
 
 /etc/xiaoya/cat/my.json文件示例（/etc/xiaoya/cat/kkys_open.js、/etc/xiaoya/cat/kkys2_open.js）：
 
-[示例文件](https://raw.githubusercontent.com/power721/alist-tvbox/master/doc/my.json)
+[示例文件](https://raw.githubusercontent.com/FlawShatter/alist-tvbox/master/doc/my.json)
 
 ``` json
 {
