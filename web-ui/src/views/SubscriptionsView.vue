@@ -59,6 +59,14 @@
       </a>
     </el-row>
     <el-row>
+     PG包本地： {{ pgLocal }}
+     PG包远程： {{ pgRemote }}
+    </el-row>
+    <el-row>
+      真心包本地： {{ zxLocal }}
+      真心包远程： {{ zxRemote }}
+    </el-row>
+    <el-row>
       <el-button @click="syncCat">同步文件</el-button>
     </el-row>
 
@@ -126,6 +134,10 @@ import {ElMessage} from "element-plus";
 
 const currentUrl = window.location.origin
 const token = ref('')
+const pgLocal = ref('')
+const pgRemote = ref('')
+const zxLocal = ref('')
+const zxRemote = ref('')
 const updateAction = ref(false)
 const dialogTitle = ref('')
 const jsonData = ref({})
@@ -208,6 +220,7 @@ const syncCat = () => {
       ElMessage.warning('同步失败')
     } else {
       ElMessage.success('同步成功')
+      setTimeout(loadVersion, 6000)
     }
   })
 }
@@ -215,6 +228,18 @@ const syncCat = () => {
 const load = () => {
   axios.get('/api/subscriptions').then(({data}) => {
     subscriptions.value = data
+  })
+  loadVersion()
+}
+
+const loadVersion = () => {
+  axios.get("/pg/version").then(({data}) => {
+    pgLocal.value = data.local
+    pgRemote.value = data.remote
+  })
+  axios.get("/zx/version").then(({data}) => {
+    zxLocal.value = data.local
+    zxRemote.value = data.remote
   })
 }
 

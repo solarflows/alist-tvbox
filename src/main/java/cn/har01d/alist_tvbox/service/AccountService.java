@@ -341,6 +341,8 @@ public class AccountService {
             }
         }
 
+        Utils.execute("bash /downloadPg.sh");
+
         indexService.getRemoteVersion();
     }
 
@@ -1013,6 +1015,16 @@ public class AccountService {
         if (aliSecret.equals(id)) {
             return accountRepository.getFirstByMasterTrue()
                     .map(Account::getRefreshToken)
+                    .orElseThrow(NotFoundException::new);
+        }
+        return null;
+    }
+
+    public String getAliOpenRefreshToken(String id) {
+        String aliSecret = settingRepository.findById(ALI_SECRET).map(Setting::getValue).orElse("");
+        if (aliSecret.equals(id)) {
+            return accountRepository.getFirstByMasterTrue()
+                    .map(Account::getOpenToken)
                     .orElseThrow(NotFoundException::new);
         }
         return null;

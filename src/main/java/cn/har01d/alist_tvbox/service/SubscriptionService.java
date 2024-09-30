@@ -1,23 +1,16 @@
 package cn.har01d.alist_tvbox.service;
 
 import cn.har01d.alist_tvbox.config.AppProperties;
+import cn.har01d.alist_tvbox.domain.DriverType;
 import cn.har01d.alist_tvbox.dto.TokenDto;
-import cn.har01d.alist_tvbox.entity.Account;
-import cn.har01d.alist_tvbox.entity.AccountRepository;
-import cn.har01d.alist_tvbox.entity.Setting;
-import cn.har01d.alist_tvbox.entity.SettingRepository;
-import cn.har01d.alist_tvbox.entity.Share;
-import cn.har01d.alist_tvbox.entity.ShareRepository;
-import cn.har01d.alist_tvbox.entity.Site;
-import cn.har01d.alist_tvbox.entity.SiteRepository;
-import cn.har01d.alist_tvbox.entity.Subscription;
-import cn.har01d.alist_tvbox.entity.SubscriptionRepository;
+import cn.har01d.alist_tvbox.entity.*;
 import cn.har01d.alist_tvbox.exception.BadRequestException;
 import cn.har01d.alist_tvbox.exception.NotFoundException;
 import cn.har01d.alist_tvbox.util.Constants;
 import cn.har01d.alist_tvbox.util.IdUtils;
 import cn.har01d.alist_tvbox.util.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -73,6 +66,8 @@ public class SubscriptionService {
     private final AccountRepository accountRepository;
     private final SiteRepository siteRepository;
     private final ShareRepository shareRepository;
+    private final PanAccountRepository panAccountRepository;
+    private final EmbyRepository embyRepository;
     private final AListLocalService aListLocalService;
 
     private String tokens = "";
@@ -87,6 +82,8 @@ public class SubscriptionService {
                                AccountRepository accountRepository,
                                SiteRepository siteRepository,
                                ShareRepository shareRepository,
+                               PanAccountRepository panAccountRepository,
+                               EmbyRepository embyRepository,
                                AListLocalService aListLocalService) {
         this.environment = environment;
         this.appProperties = appProperties;
@@ -101,6 +98,8 @@ public class SubscriptionService {
         this.accountRepository = accountRepository;
         this.siteRepository = siteRepository;
         this.shareRepository = shareRepository;
+        this.panAccountRepository = panAccountRepository;
+        this.embyRepository = embyRepository;
         this.aListLocalService = aListLocalService;
     }
 
@@ -145,6 +144,13 @@ public class SubscriptionService {
             sub.setSid("ok");
             sub.setName("OK");
             sub.setUrl("http://ok321.top/ok");
+            subscriptionRepository.save(sub);
+        }
+        if (subscriptionRepository.findBySid("zx").isEmpty()) {
+            Subscription sub = new Subscription();
+            sub.setSid("zx");
+            sub.setName("真心");
+            sub.setUrl("/zx/FongMi.json");
             subscriptionRepository.save(sub);
         }
     }
@@ -204,7 +210,7 @@ public class SubscriptionService {
     }
 
     public void checkToken(String rawToken) {
-        if (rawToken.equals("-") && tokens.isBlank()) {
+        if (tokens.isBlank()) {
             return;
         }
 
@@ -257,12 +263,13 @@ public class SubscriptionService {
             json = json.replace("VOD1_URL", readHostAddress("/vod1" + secret));
             json = json.replace("BILIBILI_URL", readHostAddress("/bilibili" + secret));
             json = json.replace("YOUTUBE_URL", readHostAddress("/youtube" + secret));
+            json = json.replace("EMBY_URL", readHostAddress("/emby" + secret));
             String ali = accountRepository.getFirstByMasterTrue().map(Account::getRefreshToken).orElse("");
             json = json.replace("ALI_TOKEN", ali);
             ali = accountRepository.getFirstByMasterTrue().map(Account::getOpenToken).orElse("");
             json = json.replace("ALI_OPEN_TOKEN", ali);
 
-            String quarkCookie = shareRepository.findByType(2).stream().findFirst().map(Share::getCookie).orElse("");
+            String quarkCookie = panAccountRepository.findByTypeAndMasterTrue(DriverType.QUARK).map(PanAccount::getCookie).orElse("");
             json = json.replace("QUARK_COOKIE", quarkCookie);
 
             if ("index.config.js".equals(file)) {
@@ -275,8 +282,9 @@ public class SubscriptionService {
     }
 
     public int syncCat() {
-        Utils.execute("rm -rf /www/pg/* && unzip -q -o /pg.zip -d /www/pg && cp -r /data/pg/* /www/pg/");
-        Utils.execute("rm -rf /www/cat/* && unzip -q -o /cat.zip -d /www/cat && cp -r /data/cat/* /www/cat/");
+        Utils.execute("rm -rf /www/cat/* && unzip -q -o /cat.zip -d /www/cat && [ -d /data/cat ] && cp -r /data/cat/* /www/cat/");
+        Utils.execute("/downloadZx.sh");
+        Utils.execute("/downloadPg.sh");
         return 0;
     }
 
@@ -475,7 +483,7 @@ public class SubscriptionService {
         List<Map<String, Object>> list = (List<Map<String, Object>>) config.get("sites");
         String secret = settingRepository.findById(ALI_SECRET).map(Setting::getValue).orElseThrow();
         String tokenUrl = shareRepository.countByType(0) > 0 ? readHostAddress("/ali/token/" + secret) : null;
-        String cookieUrl = shareRepository.countByType(2) > 0 ? readHostAddress("/quark/cookie/" + secret) : null;
+        String cookieUrl = panAccountRepository.findByTypeAndMasterTrue(DriverType.QUARK).isPresent() ? readHostAddress("/quark/cookie/" + secret) : null;
         for (Map<String, Object> site : list) {
             Object obj = site.get("ext");
             if (obj instanceof String) {
@@ -888,6 +896,16 @@ public class SubscriptionService {
         } catch (Exception e) {
             log.warn("", e);
         }
+
+        try {
+            if (embyRepository.count() > 0) {
+                Map<String, Object> site = buildSite(token, "csp_Emby", "Emby");
+                sites.add(id++, site);
+                log.debug("add Emby site: {}", site);
+            }
+        } catch (Exception e) {
+            log.warn("", e);
+        }
     }
 
     private Map<String, Object> buildSite(String token, String key, String name) throws IOException {
@@ -952,8 +970,32 @@ public class SubscriptionService {
                 log.info("load json from {}", file);
                 String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
                 String address = readHostAddress();
+                json = json.replace("./lib/tokenm.json", address + "/pg/lib/tokenm?token=" + tokens.split(",")[0]);
+                json = json.replace("./peizhi.json", address + "/zx/config?token=" + tokens.split(",")[0]);
                 json = json.replace("./", address + folder);
                 //json = json.replace(address + folder + "lib/tokenm.json", "./lib/tokenm.json");
+                if (name.equals("/zx/FongMi.json")) {
+                    String url = ServletUriComponentsBuilder.fromCurrentRequest()
+                            .scheme("http")
+                            .port(9999)
+                            .replacePath("")
+                            .replaceQuery("")
+                            .build()
+                            .toUriString();
+                    Path path = Path.of("/data/zx.json");
+                    if (Files.exists(path)) {
+                        try {
+                            json = Files.readString(path);
+                            ObjectNode objectNode = (ObjectNode) objectMapper.readTree(json);
+                            if (objectNode.has("siteUrl")) {
+                                url = objectNode.get("siteUrl").asText();
+                            }
+                        } catch (Exception e) {
+                            log.warn("", e);
+                        }
+                    }
+                    json = json.replace("你的服务器地址端口", url);
+                }
                 json = json.replace("DOCKER_ADDRESS", address);
                 json = json.replace("ATV_ADDRESS", address);
                 return json;
