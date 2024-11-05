@@ -33,10 +33,13 @@
         <el-form-item label="URL地址" label-width="140" required>
           <el-input v-model="form.url" autocomplete="off"/>
         </el-form-item>
+        <el-form-item label="User Agent" label-width="140">
+          <el-input v-model="form.userAgent" type="textarea" autocomplete="off"/>
+        </el-form-item>
         <el-form-item label="用户名" label-width="140" required>
           <el-input v-model="form.username" autocomplete="off"/>
         </el-form-item>
-        <el-form-item label="密码" label-width="140" required>
+        <el-form-item label="密码" label-width="140">
           <el-input v-model="form.password" type="password" show-password autocomplete="off"/>
         </el-form-item>
         <el-form-item label="顺序" label-width="140">
@@ -51,8 +54,8 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="dialogVisible" title="删除站点" width="30%">
-      <p>是否删除站点 - {{ form.name }}</p>
+    <el-dialog v-model="dialogVisible" title="删除Emby站点" width="30%">
+      <p>是否删除Emby站点 - {{ form.name }}</p>
       <p>{{ form.url }}</p>
       <template #footer>
       <span class="dialog-footer">
@@ -78,18 +81,20 @@ const form = ref({
   id: 0,
   name: '',
   url: '',
+  userAgent: '',
   username: '',
   password: '',
   order: 0,
 })
 
 const handleAdd = () => {
-  dialogTitle.value = '添加站点'
+  dialogTitle.value = '添加Emby站点'
   updateAction.value = false
   form.value = {
     id: 0,
     name: '',
     url: '',
+    userAgent: '',
     username: '',
     password: '',
     order: 0,
@@ -98,7 +103,7 @@ const handleAdd = () => {
 }
 
 const handleEdit = (data: any) => {
-  dialogTitle.value = '更新站点 - ' + data.name
+  dialogTitle.value = '更新Emby站点 - ' + data.name
   updateAction.value = true
   form.value = Object.assign({}, data)
   formVisible.value = true

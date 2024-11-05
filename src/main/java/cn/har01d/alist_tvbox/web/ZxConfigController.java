@@ -48,7 +48,7 @@ public class ZxConfigController {
 
     @GetMapping("/version")
     public Object version() throws IOException {
-        String remote = restTemplate.getForObject("https://gitlab.com/power0721/pg/-/raw/main/zx.version", String.class);
+        String remote = restTemplate.getForObject("http://har01d.org/zx.version", String.class);
         String local = "";
         Path path = Path.of("/data/zx_version.txt");
         if (Files.exists(path)) {
@@ -61,7 +61,7 @@ public class ZxConfigController {
     public ObjectNode config(String token) throws IOException {
         subscriptionService.checkToken(token);
 
-        String json = Files.readString(Path.of("/www/zx/peizhi.json"));
+        String json = Files.readString(Path.of("/www/zx/json/peizhi.json"));
 
         ObjectNode objectNode = (ObjectNode) objectMapper.readTree(json);
 
@@ -76,6 +76,9 @@ public class ZxConfigController {
         Path path = Path.of("/data/zx.json");
         if (Files.exists(path)) {
             json = Files.readString(path);
+            String address = subscriptionService.readHostAddress();
+            json = json.replace("DOCKER_ADDRESS", address);
+            json = json.replace("ATV_ADDRESS", address);
             ObjectNode override = (ObjectNode) objectMapper.readTree(json);
             objectNode.setAll(override);
         }

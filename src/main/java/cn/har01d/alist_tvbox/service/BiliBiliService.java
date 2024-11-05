@@ -95,6 +95,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static cn.har01d.alist_tvbox.util.Constants.ALI_SECRET;
 import static cn.har01d.alist_tvbox.util.Constants.BILIBILI_CODE;
 import static cn.har01d.alist_tvbox.util.Constants.BILIBILI_COOKIE;
 import static cn.har01d.alist_tvbox.util.Constants.BILI_BILI;
@@ -315,6 +316,14 @@ public class BiliBiliService {
     public Map<String, Object> updateCookie(CookieData cookieData) {
         settingRepository.save(new Setting(BILIBILI_COOKIE, cookieData.getCookie()));
         return getLoginStatus();
+    }
+
+    public String getBiliBiliCookie(String id) {
+        String aliSecret = settingRepository.findById(ALI_SECRET).map(Setting::getValue).orElse("");
+        if (aliSecret.equals(id)) {
+            return settingRepository.findById(BILIBILI_COOKIE).map(Setting::getValue).orElse("");
+        }
+        return "";
     }
 
     public Map<String, Object> getLoginStatus() {
@@ -775,6 +784,19 @@ public class BiliBiliService {
         return result;
     }
 
+    private String getWebId(String mid) {
+        String url = "https://space.bilibili.com/" + mid + "/video";
+        HttpEntity<Void> entity = buildHttpEntity(null);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        String html = response.getBody();
+        int start = html.indexOf("__RENDER_DATA__");
+        start = html.indexOf("access_id", start) + 18;
+        int end = html.indexOf("</script>", start) - 6;
+        String result = html.substring(start, end);
+        log.debug("{}", result);
+        return result;
+    }
+
     public MovieList getUpMedia(String mid, String sort, int page) throws IOException {
         if (StringUtils.isBlank(sort)) {
             sort = "pubdate";
@@ -796,6 +818,8 @@ public class BiliBiliService {
 
         HttpEntity<Void> entity = buildHttpEntity(null);
         getKeys(entity);
+        String webId = getWebId(mid);
+        map.put("w_webid", webId);
         String url = NEW_SEARCH_API + "?" + Utils.encryptWbi(map, imgKey, subKey);
         log.debug("getUpMedia: {}", url);
 
@@ -863,6 +887,8 @@ public class BiliBiliService {
 
         HttpEntity<Void> entity = buildHttpEntity(null);
         getKeys(entity);
+        String webId = getWebId(id);
+        map.put("w_webid", webId);
         String url = NEW_SEARCH_API + "?" + Utils.encryptWbi(map, imgKey, subKey);
         log.debug("getUpPlaylist: {}", url);
 
